@@ -18,8 +18,8 @@ class LiteralOperand(Operand):
 
 @dataclass()
 class Instruction(ABC):
-    dest: RegisterOperand
     op: str
+    dest: RegisterOperand
     pass
 
 @dataclass()
@@ -30,11 +30,3 @@ class MathInstruction(Instruction):
 @dataclass()
 class MemoryInstruction(Instruction):
     src: Operand
-
-
-
-
-
-p = InstructionParser()
-print(p.parse_instruction('L.D F6, 34(R2)'))
-print(p.parse_instruction('MUL.D F0, F2, F4'))
