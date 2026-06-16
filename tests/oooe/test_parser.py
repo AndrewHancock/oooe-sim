@@ -1,13 +1,13 @@
 import unittest
 from oooe.parser import *
-
+from oooe.model.instruction import *
 
 class TestParser(unittest.TestCase):
     def test_tokenize(self):
         p = InstructionParser()
-        p.tokenize("R1 R2,LD.D,123 123(F1)")
+        p.tokenize("R1 R2,L.D,123 123(F1)")
         actual = p.tokens
-        expected = [(TokenType.REG, 'R1'), (TokenType.REG, 'R2'), (TokenType.COMMA, ','), (TokenType.OP, 'LD.D'),
+        expected = [(TokenType.REG, 'R1'), (TokenType.REG, 'R2'), (TokenType.COMMA, ','), (TokenType.OP, 'L.D'),
                     (TokenType.COMMA, ','), (TokenType.INT, '123'), (TokenType.INT, '123'),
                     (TokenType.L_PAREN, '('),(TokenType.REG, 'F1'), (TokenType.R_PAREN, ')')]
 
@@ -16,9 +16,9 @@ class TestParser(unittest.TestCase):
     def test_tokenize_neg(self):
         p = InstructionParser()
         with self.assertRaises(ValueError):
-            p.tokenize("R1 LD.D ? F2 MUL.D")
+            p.tokenize("R1 L.D ? F2 MUL.D")
 
-    def test_parse_basic_reg_opearnd(self):
+    def test_parse_basic_reg_operand(self):
         p = InstructionParser()
         p.tokenize("R1")
         actual = p.parse_operand()
@@ -60,9 +60,9 @@ class TestParser(unittest.TestCase):
 
     def test_parse_prefix_mem_instruction(self):
         p = InstructionParser()
-        p.tokenize("LD.D F6, 34(R2)")
+        p.tokenize("L.D F6, 34(R2)")
         actual = p.parse_instruction()
-        expected = MemoryInstruction(op='LD.D',
+        expected = MemoryInstruction(op='L.D',
                                      dest=RegisterOperand(label='F6', is_mem_reference=False, offset=0),
                                      src=RegisterOperand(label='R2', is_mem_reference=True, offset=34))
         self.assertEqual(expected, actual)

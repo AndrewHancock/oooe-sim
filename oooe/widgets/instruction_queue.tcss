@@ -1,0 +1,3 @@
+VerticalScroll {
+    border: solid red;
+   }

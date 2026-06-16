@@ -6,7 +6,9 @@ build-backend = "setuptools.build_meta"
 name = "oooe-simulator"
 version = "0.01"
 dependencies = [
+  "textual"
 ]
+
 requires-python = ">=3.12"
 authors = [
   {name = "Andrew Hancock", email = "andrewneilhancock@gmail.com"}
@@ -14,7 +16,12 @@ authors = [
 description = "Simulate basic Out Of Order Execution"
 readme = "README.md"
 license = "MIT"
-license-files = ["LICEN[CS]E.*"]
+license-files = ["LICENSE"]
+
+[tool.setuptools]
+packages = ["oooe"]
+
+
 
 
 

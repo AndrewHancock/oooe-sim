@@ -1,11 +1,10 @@
 import re
 from enum import Enum
 from typing import Optional
-
-from oooe.instruction import *
+from oooe.model.instruction import *
 
 OPS = {
-    'LD[.]D',
+    'L[.]D',
     'MUL[.]D',
     'SUB[.]D',
     'DIV[.]D',
@@ -24,7 +23,7 @@ class TokenType(Enum):
     R_PAREN = re.compile(r'\)')
     REG = re.compile(r'[a-zA-Z]\d+|[([][a-zA-Z]\d+[])]')
     OP = re.compile('|'.join(OPS))
-    ERROR = re.compile('.')
+    ERROR = re.compile('')
 
 
 class InstructionParser:
@@ -42,6 +41,7 @@ class InstructionParser:
 
     def tokenize(self, input_str: str= ""):
         pos = 0
+        self._tokens.clear()
         while pos < len(input_str):
             for token_type in TokenType:
                 if match := token_type.value.match(input_str, pos):
@@ -52,7 +52,7 @@ class InstructionParser:
                         self._tokens.append((token_type, match.group(0)))
                     break
 
-    def parse_instruction(self) -> Instruction:
+    def parse_instruction(self) -> Optional[Instruction]:
         self._pos = 0
         return self.parse_prefix_instruction()
 
@@ -112,3 +112,4 @@ class InstructionParser:
                 return RegisterOperand(label=label, is_mem_reference=False, offset=0)
         self._pos = pos
         return None
+
