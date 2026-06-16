@@ -8,7 +8,7 @@ from oooe.model.reservation_station import ReservationStation
 class ExecutionUnit:
     op_times: dict[str, int]
 
-    reservation_stations: list[ReservationStation]
+    reservation_stations: dict[str, ReservationStation]
 
     cycles_to_complete: Optional[int] = None
     op: Optional[str] = None

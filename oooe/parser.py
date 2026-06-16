@@ -113,3 +113,12 @@ class InstructionParser:
         self._pos = pos
         return None
 
+def get_instructions(path: str) -> list[Instruction]:
+    rows = []
+    with open(path) as f:
+        p = InstructionParser()
+        for l in f.readlines():
+            p.tokenize(l.strip())
+            i = p.parse_instruction()
+            rows.append(i)
+    return rows
