@@ -65,16 +65,16 @@ class IssueAction(Action):
 
         if _src in reg.register_allocation_table:
             val1 = None
-            rs1 = _src
+            rs1 = reg.register_allocation_table[_src]
         else:
             val1 = reg.get_register_value(_src)
             rs1 = None
 
         if _src2 and _src2 in reg.register_allocation_table:
-            _val2 = None
-            rs2 = _src2
+            val2 = None
+            rs2 = reg.register_allocation_table[_src2]
         elif _src2:
-            _val2 = reg.get_register_value(_src2)
+            val2 = reg.get_register_value(_src2)
             rs2 = None
         return replace(src_rs, op=_op, val1=val1, val2=val2, rs1=rs1, rs2=rs2)
 

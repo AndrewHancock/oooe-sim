@@ -23,5 +23,8 @@ def get_processor(instructions: list[Instruction]) -> Processor:
         ExecutionUnit(op_times={'SUB.D': 2, 'ADD.D': 2}, reservation_stations={rs.name: rs for rs in add_rs}),
         ExecutionUnit(op_times={'MUL.D': 10, 'DIV.D': 40}, reservation_stations={rs.name: rs for rs in mul_rs})
     ]
-
-    return Processor(execution_units=execution_units, instruction_queue=instructions)
+    p = Processor(execution_units=execution_units, instruction_queue=instructions)
+    p.registers.isa_registers['R2'] = 100
+    p.registers.isa_registers['R3'] = 200
+    p.registers.isa_float_registers['F4'] = 2.5
+    return p

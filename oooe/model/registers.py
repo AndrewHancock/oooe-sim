@@ -2,9 +2,9 @@ from dataclasses import dataclass, field
 
 class RegisterFile:
     def __init__(self):
-        self.isa_registers = {'R' + str(i + 1): 0 for i in range(0,16)}
-        self.isa_float_registers = {'F' + str(i + 1): 0 for i in range(0, 16)}
-        self.physical_registers = {'P' + str(i + 1): 0 for i in range(0, 16)}
+        self.isa_registers = {}
+        self.isa_float_registers = {}
+        self.physical_registers = {}
         self.register_allocation_table: dict[str, str] = dict()
         self.allocated_registers: set[str] = set()
 

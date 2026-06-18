@@ -1,5 +1,5 @@
 from oooe.controller.action import Action
-from oooe.controller.dispatch import issue
+from oooe.controller.issue import issue
 from oooe.model.processor import Processor
 
 

@@ -10,7 +10,8 @@ from oooe.parser import get_instructions
 from oooe.view.clock import ClockCycleView
 from oooe.view.execution_unit import ExecutionUnitView
 from oooe.view.instruction_queue import InstructionQueueView
-from oooe.view.register import RegisterAllocationTableView
+from oooe.view.register_allocation_table import RegisterAllocationTableView
+from oooe.view.registers import RegisterView
 
 
 class OooeSimApp(App):
@@ -33,6 +34,7 @@ class OooeSimApp(App):
                 yield ClockCycleView(id="clock_cycle")
                 yield InstructionQueueView(self._processor)
                 yield RegisterAllocationTableView(self._processor)
+                yield RegisterView(self._processor)
             with Horizontal():
                 for ex_unit in self._processor.execution_units:
                     yield ExecutionUnitView(ex_unit)
@@ -42,6 +44,7 @@ class OooeSimApp(App):
     def processor_updated(self):
         self.query_one(ClockCycleView).clock_cycle = self._processor_sim.clock_cycle
         self.query_one(InstructionQueueView).processor_updated()
+        self.query_one(RegisterView).processor_updated()
         self.query_one(RegisterAllocationTableView).processor_updated()
         for ex_unit_vw in self.query(ExecutionUnitView):
             ex_unit_vw.processor_updated()
