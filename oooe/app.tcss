@@ -1,0 +1,12 @@
+ExecutionUnitView {
+    border: solid red;
+   }
+
+#clock_cycle {
+    border: double green;
+    align: center middle;
+}
+Digits {
+
+        width: auto;
+   }

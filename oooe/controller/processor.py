@@ -1,5 +1,5 @@
 from oooe.controller.action import Action
-from oooe.controller.dispatch import dispatch
+from oooe.controller.dispatch import issue
 from oooe.model.processor import Processor
 
 
@@ -14,7 +14,7 @@ class ProcessorSim:
 
         if self.clock_cycle > len(self.actions_by_clock):
             actions = []
-            if action := dispatch(self.processor):
+            if action := issue(self.processor):
                 actions.append(action)
             self.actions_by_clock.append(actions)
         else:

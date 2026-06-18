@@ -1,5 +1,4 @@
 from oooe.controller.action import Action
-from oooe.model import processor
 from oooe.model.execution_unit import ExecutionUnit
 from oooe.model.instruction import Instruction, MemoryInstruction, MathInstruction
 from oooe.model.processor import Processor
@@ -7,7 +6,7 @@ from oooe.model.reservation_station import ReservationStation
 from dataclasses import replace
 
 
-class DispatchAction(Action):
+class IssueAction(Action):
     def __init__(self, processor: Processor, execution_unit: ExecutionUnit, target_rs_name: str):
         super().__init__()
         self._processor = processor
@@ -80,14 +79,14 @@ class DispatchAction(Action):
         return replace(src_rs, op=_op, val1=val1, val2=val2, rs1=rs1, rs2=rs2)
 
 
-def dispatch(p: Processor) -> DispatchAction | None:
+def issue(p: Processor) -> IssueAction | None:
     if p.instruction_queue:
         ins = p.instruction_queue[0]
         for ex_unit in p.execution_units:
             if ins.op in ex_unit.op_times.keys():
                 for name, rs in ex_unit.reservation_stations.items():
                     if not rs.op:
-                        return DispatchAction(p, ex_unit, name)
+                        return IssueAction(p, ex_unit, name)
     return None
 
 

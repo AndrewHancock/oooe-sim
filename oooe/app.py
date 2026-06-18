@@ -7,13 +7,14 @@ from textual.containers import VerticalScroll, Horizontal, Vertical
 from oooe.controller.processor import ProcessorSim
 from oooe.model.processor import Processor, get_processor
 from oooe.parser import get_instructions
+from oooe.view.clock import ClockCycleView
 from oooe.view.execution_unit import ExecutionUnitView
 from oooe.view.instruction_queue import InstructionQueueView
 from oooe.view.register import RegisterAllocationTableView
 
 
 class OooeSimApp(App):
-    CSS_PATH = "view/instruction_queue.tcss"
+    CSS_PATH = "app.tcss"
     BINDINGS = [("d", "toggle_dark", "Toggle dark mode"),
                 ("f", "forward_clock", "Forward one clock cycle"),
                 ("r", "reverse_clock", "Reverse one clock cycle")]
@@ -29,6 +30,7 @@ class OooeSimApp(App):
         yield Footer()
         with Vertical():
             with Horizontal():
+                yield ClockCycleView(id="clock_cycle")
                 yield InstructionQueueView(self._processor)
                 yield RegisterAllocationTableView(self._processor)
             with Horizontal():
@@ -38,6 +40,7 @@ class OooeSimApp(App):
         self.processor_updated()
 
     def processor_updated(self):
+        self.query_one(ClockCycleView).clock_cycle = self._processor_sim.clock_cycle
         self.query_one(InstructionQueueView).processor_updated()
         self.query_one(RegisterAllocationTableView).processor_updated()
         for ex_unit_vw in self.query(ExecutionUnitView):
