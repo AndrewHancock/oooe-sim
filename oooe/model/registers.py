@@ -9,8 +9,11 @@ class RegisterFile:
         self.allocated_registers: set[str] = set()
 
 
-    def add_rat_entry(self, reg_label: str, rs_name: str):
+    def update_rat_entry(self, reg_label: str, rs_name: str):
         self.register_allocation_table[reg_label] = rs_name
+
+    def remove_rat_entry(self, reg_label: str):
+        self.register_allocation_table.pop(reg_label)
 
     def get_register_value(self, label: str) -> int:
         if label[0] == 'R':

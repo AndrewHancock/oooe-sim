@@ -14,13 +14,15 @@ class ProcessorSim:
 
         if self.clock_cycle > len(self.actions_by_clock):
             actions = []
-            actions.append(dispatch(self.processor))
+            if action := dispatch(self.processor):
+                actions.append(action)
             self.actions_by_clock.append(actions)
         else:
-            actions = self.actions_by_clock[self.clock_cycle]
+            actions = self.actions_by_clock[self.clock_cycle - 1]
 
         for action in actions:
             action.do()
+
     def reverse_clock(self):
         if self.clock_cycle == 0:
             return

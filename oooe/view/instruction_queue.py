@@ -1,6 +1,6 @@
 from textual.containers import VerticalScroll
 from textual.reactive import reactive
-from textual.widgets import DataTable
+from textual.widgets import DataTable, Label
 
 from oooe.model.instruction import MemoryInstruction, MathInstruction
 from oooe.model.processor import Processor
@@ -14,11 +14,15 @@ class InstructionQueueView(VerticalScroll):
         self.processor = processor
 
     def compose(self):
+        yield Label("Instruction Queue")
         yield self.data_table
+
+    def on_mount(self):
+        self.data_table.add_columns("Op", "dest", "src1", "src2")
 
     def processor_updated(self):
         self.data_table.clear()
-        self.data_table.add_columns("Op", "dest", "src1", "src2")
+
         for instruction in self.processor.instruction_queue:
             match instruction:
                 case MemoryInstruction(op=op, dest=dest, src=src):

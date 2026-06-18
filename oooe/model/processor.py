@@ -20,7 +20,7 @@ def get_processor(instructions: list[Instruction]) -> Processor:
 
     execution_units = [
         ExecutionUnit(op_times={'L.D' : 2}, reservation_stations={rs.name: rs for rs in load_rs}),
-        ExecutionUnit(op_times={'SUB.D': 2}, reservation_stations={rs.name: rs for rs in add_rs}),
+        ExecutionUnit(op_times={'SUB.D': 2, 'ADD.D': 2}, reservation_stations={rs.name: rs for rs in add_rs}),
         ExecutionUnit(op_times={'MUL.D': 10, 'DIV.D': 40}, reservation_stations={rs.name: rs for rs in mul_rs})
     ]
 

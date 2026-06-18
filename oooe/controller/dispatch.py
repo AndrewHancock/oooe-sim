@@ -15,14 +15,25 @@ class DispatchAction(Action):
         self._target_rs_name = target_rs_name
         self._instruction = None
         self._old_rs_entry = None
+        self._has_old_rat_entry = None
+        self._old_rat_entry = None
 
 
     def do(self):
         super().do()
+        # Pop instruction off the queue
         self._instruction = self._processor.instruction_queue.pop(0)
+
+        # Update RAT, saving old RAT entry if it exists
+        self._has_old_rat_entry = self._instruction.dest.label in self._processor.registers.register_allocation_table
+        if self._has_old_rat_entry:
+            self._old_rat_entry = self._processor.registers.register_allocation_table[self._instruction.dest.label]
+        self._processor.registers.update_rat_entry(self._instruction.dest.label, self._target_rs_name)
+
+        # Update reservation station, saving old reservation station entry
         rs = self._ex_unit.reservation_stations[self._target_rs_name]
         self._old_rs_entry = rs
-        self._processor.registers.add_rat_entry(self._instruction.dest.label, rs.name)
+        self._processor.registers.update_rat_entry(self._instruction.dest.label, rs.name)
         new_rs = self.get_rs_for_instruction(self._instruction, rs)
         self._ex_unit.reservation_stations[self._target_rs_name] = new_rs
 
@@ -31,6 +42,10 @@ class DispatchAction(Action):
         super().undo()
         self._processor.instruction_queue.insert(0, self._instruction)
         self._ex_unit.reservation_stations[self._target_rs_name] = self._old_rs_entry
+        if not self._has_old_rat_entry:
+            self._processor.registers.remove_rat_entry(self._instruction.dest.label)
+        else:
+            self._processor.registers.update_rat_entry(self._instruction.dest.label, self._old_rat_entry)
 
     def get_rs_for_instruction(self, instruction: Instruction, src_rs) -> ReservationStation:
         _op = instruction.op
@@ -66,12 +81,13 @@ class DispatchAction(Action):
 
 
 def dispatch(p: Processor) -> DispatchAction | None:
-    ins = p.instruction_queue[0]
-    for ex_unit in p.execution_units:
-        if ins.op in ex_unit.op_times.keys():
-            for name, rs in ex_unit.reservation_stations.items():
-                if not rs.op:
-                    return DispatchAction(p, ex_unit, name)
+    if p.instruction_queue:
+        ins = p.instruction_queue[0]
+        for ex_unit in p.execution_units:
+            if ins.op in ex_unit.op_times.keys():
+                for name, rs in ex_unit.reservation_stations.items():
+                    if not rs.op:
+                        return DispatchAction(p, ex_unit, name)
     return None
 
 
