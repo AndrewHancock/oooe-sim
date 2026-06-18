@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from oooe.model import reservation_station
 from oooe.model.execution_unit import ExecutionUnit
 from oooe.model.instruction import Instruction
+from oooe.model.registers import RegisterFile
 from oooe.model.reservation_station import ReservationStation
 
 
@@ -10,6 +11,7 @@ from oooe.model.reservation_station import ReservationStation
 class Processor:
     execution_units: list[ExecutionUnit]
     instruction_queue: list[Instruction] = field(default_factory=list)
+    registers :RegisterFile = field(default_factory=RegisterFile)
 
 def get_processor(instructions: list[Instruction]) -> Processor:
     load_rs = [ReservationStation(name='LD' + str(i + 1)) for i in  range(0, 2)]
