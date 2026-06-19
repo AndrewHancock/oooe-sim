@@ -9,8 +9,5 @@ class ExecutionUnit:
     op_times: dict[str, int]
 
     reservation_stations: dict[str, ReservationStation]
-
-    cycles_to_complete: Optional[int] = None
-    op: Optional[str] = None
-    val1: Optional[int] = None
-    val2: Optional[int] = None
+    executing_rs: Optional[str] = None
+    cycles_remaining: Optional[int] = None

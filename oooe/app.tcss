@@ -10,3 +10,15 @@ Digits {
 
         width: auto;
    }
+
+
+#execution_unit {
+align: center middle;
+}
+
+#execution_text {
+    background: blue 50%;
+    border: wide white;
+    width: auto;
+}
+
