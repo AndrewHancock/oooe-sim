@@ -62,19 +62,19 @@ class TestParser(unittest.TestCase):
         p = InstructionParser()
         p.tokenize("L.D F6, 34(R2)")
         actual = p.parse_instruction()
-        expected = MemoryInstruction(op='L.D',
+        expected = Instruction(op='L.D',
                                      dest=RegisterOperand(label='F6', is_mem_reference=False, offset=0),
-                                     src=RegisterOperand(label='R2', is_mem_reference=True, offset=34))
+                                     srcs=[RegisterOperand(label='R2', is_mem_reference=True, offset=34)])
         self.assertEqual(expected, actual)
 
     def test_parse_prefix_math_instruction(self):
         p = InstructionParser()
         p.tokenize("MUL.D F6, F12, 34(R2)")
         actual = p.parse_instruction()
-        expected = MathInstruction(op='MUL.D',
+        expected = Instruction(op='MUL.D',
                                      dest=RegisterOperand(label='F6', is_mem_reference=False, offset=0),
-                                     src1=RegisterOperand(label='F12', is_mem_reference=False, offset=0),
-                                     src2=RegisterOperand(label='R2', is_mem_reference=True, offset=34))
+                                     srcs=[RegisterOperand(label='F12', is_mem_reference=False, offset=0),
+                                           RegisterOperand(label='R2', is_mem_reference=True, offset=34)])
         self.assertEqual(expected, actual)
 
 

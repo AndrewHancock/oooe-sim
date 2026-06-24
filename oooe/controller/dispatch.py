@@ -1,6 +1,6 @@
 from oooe.controller.action import Action
 from oooe.model.execution_unit import ExecutionUnit
-from oooe.model.instruction import Instruction, MemoryInstruction, MathInstruction, RegisterOperand
+from oooe.model.instruction import Instruction, RegisterOperand
 from oooe.model.processor import Processor
 from oooe.model.reservation_station import ReservationStation
 from dataclasses import replace
@@ -52,20 +52,12 @@ class DispatchAction(Action):
         val2 = None
         rs2 = None
         _offset = None
-        match instruction:
-            case MemoryInstruction(dest=dest, src=src):
-                _dest = dest.label
-                _src = src.label
-                if isinstance(src, RegisterOperand) and src.is_mem_reference:
-                    _offset = src.offset
-                _src2 = None
-            case MathInstruction( dest=dest, src1=src1, src2=src2):
-                _dest = dest.label
-                _src = src1.label
-                _src2 = src2.label
-            case _:
-                raise NotImplementedError()
 
+        _src = instruction.srcs[0].label
+        if len(instruction.srcs) > 1:
+            _src2 = instruction.srcs[1].label
+        else:
+            _src2 = None
         if _src in reg.register_allocation_table:
             val1 = None
             rs1 = reg.register_allocation_table[_src]

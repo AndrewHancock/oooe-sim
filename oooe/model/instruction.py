@@ -26,27 +26,10 @@ class LiteralOperand(Operand):
     pass
 
 @dataclass()
-class Instruction(ABC):
+class Instruction():
     op: str
     dest: RegisterOperand
-    pass
+    srcs: list[Operand]
 
     def __str__(self)-> str:
-        return f'{self.op} {self.dest}'
-
-@dataclass()
-class MathInstruction(Instruction):
-    src1: Operand
-    src2: Operand
-
-    def __str__(self) -> str:
-        return f'{self.op} {self.dest}, {self.src1}, {self.src2}'
-
-@dataclass()
-class MemoryInstruction(Instruction):
-    src: Operand
-
-    def __str__(self)-> str:
-        return f'{self.op} {self.dest}, {self.src}'
-
-
+        return f'{self.op} {", ".join([self.dest].extend(self.srcs))}'

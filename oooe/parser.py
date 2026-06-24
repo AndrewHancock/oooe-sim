@@ -63,14 +63,9 @@ class InstructionParser:
             self._pos += 1
             operands = self.parse_operands()
             if operands:
-                if len(operands) == 2:
-                    dest, src = operands
-                    self._pos += 2
-                    return MemoryInstruction(op=next_label, dest=dest, src=src)
-                elif len(operands) == 3:
-                    dest, src1, src2 = operands
-                    self._pos += 3
-                    return MathInstruction(op=next_label, dest=dest, src1=src1, src2=src2)
+                dest = operands[0]
+                srcs = operands[1:]
+                return Instruction(op=next_label, dest=dest, srcs=srcs)
         self._pos = pos
         return None
 
