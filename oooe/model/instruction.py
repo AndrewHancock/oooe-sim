@@ -1,16 +1,17 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from abc import ABC
-from typing import List
+from typing import List, Optional
 
 
 @dataclass
 class Operand(ABC):
-    label: str
+    pass
 
-@dataclass()
+@dataclass
 class RegisterOperand(Operand):
-    is_mem_reference: bool
-    offset: int
+    label: str
+    is_mem_reference: bool = field(default=False)
+    offset: Optional[int] = field(default=0)
 
     def __str__(self)-> str:
         result = self.label
@@ -21,12 +22,18 @@ class RegisterOperand(Operand):
                 result = str(self.offset) + result
         return result
 
-@dataclass()
-class LiteralOperand(Operand):
-    pass
+@dataclass
+class MemoryOperand(Operand):
+    base_register: RegisterOperand
+    offset: RegisterOperand | LiteralOperand = field(default=None)
+
 
 @dataclass()
-class Instruction():
+class LiteralOperand(Operand):
+    value: int
+
+@dataclass()
+class Instruction:
     op: str
     dest: RegisterOperand
     srcs: list[Operand]

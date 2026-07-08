@@ -6,7 +6,7 @@ class TestParser(unittest.TestCase):
     def test_tokenize(self):
         p = InstructionParser()
         p.tokenize("R1 R2,L.D,123 123(F1)")
-        actual = p.tokens
+        actual = p._tokens
         expected = [(TokenType.REG, 'R1'), (TokenType.REG, 'R2'), (TokenType.COMMA, ','), (TokenType.OP, 'L.D'),
                     (TokenType.COMMA, ','), (TokenType.INT, '123'), (TokenType.INT, '123'),
                     (TokenType.L_PAREN, '('),(TokenType.REG, 'F1'), (TokenType.R_PAREN, ')')]
@@ -25,7 +25,7 @@ class TestParser(unittest.TestCase):
         expected = RegisterOperand(label='R1', is_mem_reference=False, offset=0)
         self.assertEqual(actual, expected)
 
-        self.assertEqual(p.pos, 1)
+        self.assertEqual(p._pos, 1)
 
     def test_parse_mem_operand_no_offset(self):
         p = InstructionParser()
