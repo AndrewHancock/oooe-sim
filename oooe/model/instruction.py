@@ -2,6 +2,10 @@ from dataclasses import dataclass, field
 from abc import ABC
 from typing import List, Optional
 
+@dataclass
+class Label:
+    label: str
+
 
 @dataclass
 class Operand(ABC):
@@ -27,16 +31,30 @@ class MemoryOperand(Operand):
     base_register: RegisterOperand
     offset: RegisterOperand | LiteralOperand = field(default=None)
 
+    def __str__(self)-> str:
+        result = f'[{str(self.base_register)}'
+        if self.offset:
+            result += f", {str(self.offset)}"
+        result += ']'
+        return result
+
 
 @dataclass()
 class LiteralOperand(Operand):
     value: int
 
+    def __str__(self)-> str:
+        return str(self.value)
+
 @dataclass()
 class Instruction:
-    op: str
-    dest: RegisterOperand
-    srcs: list[Operand]
+    op_code: str
+    operands: Optional[list[Operand | Label]]
 
     def __str__(self)-> str:
-        return f'{self.op} {", ".join([self.dest].extend(self.srcs))}'
+        result = self.op_code
+        if self.operands:
+            result += " "
+            result += ", ".join(str(s) for s in self.operands)
+
+        return result

@@ -1,6 +1,6 @@
 import unittest
 
-from oooe.model.instruction import RegisterOperand, LiteralOperand, MemoryOperand
+from oooe.model.instruction import RegisterOperand, LiteralOperand, MemoryOperand, Label
 from oooe.parser.aarch_parser import AArchParser
 
 
@@ -26,6 +26,16 @@ class TestArchParser(unittest.TestCase):
         actual = self.parser.parse_literal()
         expected = LiteralOperand(value=1254)
         self.assertEqual(expected, actual)
+
+    def test_parse_immediate(self):
+        input_str = "#1254"
+
+        self.parser.tokenize(input_str)
+
+        actual = self.parser.parse_literal()
+        expected = LiteralOperand(value=1254)
+        self.assertEqual(expected, actual)
+
 
     def test_parse_op_list_single(self):
         input_str = "x0"
@@ -66,3 +76,13 @@ class TestArchParser(unittest.TestCase):
         actual = self.parser.parse_memory_operand()
         expected = MemoryOperand(base_register=RegisterOperand(label="x0"), offset=LiteralOperand(value=123))
         self.assertEqual(expected, actual)
+
+    def test_label(self):
+        input_str = "some_label:"
+        self.parser.tokenize(input_str)
+
+        actual = self.parser.parse_label()
+        expected = Label(label="some_label")
+        self.assertEqual(expected, actual)
+
+
